@@ -76,7 +76,7 @@ function Logo({ light = false, full = false }: { light?: boolean; full?: boolean
 
   return (
     <a href="#top" className="group inline-flex items-center gap-3" aria-label="CallCare BPO home">
-      <span className={`grid size-11 place-items-center overflow-hidden rounded-[13px] border ${light ? "border-white/20 bg-[#eef6f1]" : "border-[#c9a227]/35 bg-[#fbfdfc] shadow-[0_8px_18px_-14px_rgba(23,50,38,.55)]"}`}>
+      <span className={`grid size-10 place-items-center overflow-hidden rounded-[13px] border ${light ? "border-white/20 bg-[#eef6f1]" : "border-[#c9a227]/35 bg-[#fbfdfc] shadow-[0_8px_18px_-14px_rgba(23,50,38,.55)]"}`}>
         <img src={light ? logoIconCream : logoIconDark} alt="" className="size-8 object-contain" />
       </span>
       <span className={`font-display text-[16px] font-bold tracking-[-.05em] ${light ? "text-white" : "text-[#173226]"}`}>
@@ -123,7 +123,7 @@ export default function Home() {
   return (
     <div id="top" className="min-h-screen overflow-hidden bg-[#fbfdfc] text-[#173226]">
       <header className="sticky top-0 z-40 border-b border-[#173226]/10 bg-[#fbfdfc]/90 text-[#173226] shadow-[0_10px_30px_-26px_rgba(23,50,38,.45)] backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-5 py-4 lg:px-10">
+        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-5 py-2.5 lg:px-10">
           <Logo />
           <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
             {[['Services', '#services'], ['Process', '#process'], ['Who we help', '#industries'], ['About', '#about']].map(([label, href]) => (
@@ -137,16 +137,16 @@ export default function Home() {
       </header>
 
       <main>
-        <section ref={heroRef} onMouseMove={handleHeroMove} onMouseLeave={resetHeroMove} className="hero-noise relative isolate min-h-[720px] overflow-hidden bg-[#173226] text-white lg:min-h-[760px]">
+        <section ref={heroRef} onMouseMove={handleHeroMove} onMouseLeave={resetHeroMove} className="hero-noise relative isolate min-h-[670px] overflow-hidden bg-[#173226] text-white lg:min-h-[710px]">
           <img src={heroImage} alt="CallCare operations professional at work" className="absolute inset-0 -z-20 size-full object-cover object-center opacity-65" />
           <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,#173226_0%,rgba(7,58,45,.92)_29%,rgba(7,58,45,.36)_65%,rgba(7,58,45,.2)_100%)]" />
           <div className="hero-ring absolute right-[8%] top-[18%] -z-10 hidden size-72 rounded-full border border-[#c9a227]/35 lg:block" /><div className="absolute inset-y-0 right-0 -z-10 hidden w-[28%] bg-[#c9a227]/10 lg:block [clip-path:polygon(35%_0,100%_0,100%_100%,0%_100%)]" />
-          <div className="relative mx-auto flex min-h-[720px] max-w-[1280px] items-end px-5 pb-16 pt-36 lg:min-h-[760px] lg:px-10 lg:pb-24"><span className="absolute left-5 top-32 hidden size-3 rounded-full bg-[#c9a227] shadow-[0_0_0_7px_rgba(217,154,61,.12)] lg:block" />
+          <div className="relative mx-auto flex min-h-[670px] max-w-[1280px] items-end px-5 pb-12 pt-28 lg:min-h-[710px] lg:px-10 lg:pb-16"><span className="absolute left-5 top-32 hidden size-3 rounded-full bg-[#c9a227] shadow-[0_0_0_7px_rgba(217,154,61,.12)] lg:block" />
             <div className="max-w-[760px] reveal">
-              <div className="mb-7 flex items-center gap-3 text-[#d6e6db]"><span className="h-px w-12 bg-[#c9a227]" /><span className="eyebrow">Operational support that helps you scale</span></div>
-              <h1 className="font-display max-w-[760px] text-balance text-[clamp(3.25rem,7vw,7.15rem)] font-semibold leading-[.92] tracking-[-.075em]">Put the busywork in <span className="font-editorial italic text-[#c9a227]">capable hands.</span></h1>
-              <p className="mt-8 max-w-[520px] text-[17px] leading-8 text-[#e4eee7]/80">CallCare BPO becomes an extension of your team, handling the work that keeps your business moving so you can focus on what matters most: growth.</p>
-              <div className="mt-9 flex flex-wrap items-center gap-4"><a href="#contact" className="inline-flex items-center gap-3 rounded-full bg-[#fbfdfc] px-5 py-3.5 text-sm font-bold text-[#173226] hover:bg-white">Build your support team <ArrowUpRight size={17} /></a><a href="#services" className="inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-white/80 hover:text-white">Explore services <ArrowDownRight size={17} /></a></div>
+              <div className="mb-5 flex items-center gap-3 text-[#d6e6db]"><span className="h-px w-12 bg-[#c9a227]" /><span className="eyebrow">Operational support that helps you scale</span></div>
+              <h1 className="font-display max-w-[760px] text-balance text-[clamp(3.05rem,6.4vw,6.55rem)] font-semibold leading-[.92] tracking-[-.075em]">Put the busywork in <span className="font-editorial italic text-[#c9a227]">capable hands.</span></h1>
+              <p className="mt-6 max-w-[520px] text-[16px] leading-7 text-[#e4eee7]/80">CallCare BPO becomes an extension of your team, handling the work that keeps your business moving so you can focus on what matters most: growth.</p>
+              <div className="mt-7 flex flex-wrap items-center gap-4"><a href="#contact" className="inline-flex items-center gap-3 rounded-full bg-[#fbfdfc] px-5 py-3.5 text-sm font-bold text-[#173226] hover:bg-white">Build your support team <ArrowUpRight size={17} /></a><a href="#services" className="inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-white/80 hover:text-white">Explore services <ArrowDownRight size={17} /></a></div>
             </div>
             <div className="absolute bottom-8 right-5 hidden w-[240px] lg:block"><div className="flex items-end justify-between gap-2 border-b border-white/25 pb-3"><div className="bar-graph flex h-32 items-end gap-2">{[42, 70, 54, 100, 78].map((h, i) => <span key={i} className="w-7 bg-[#98c0aa]" style={{ height: `${h}%`, animationDelay: `${i * 90}ms` }} />)}</div><span className="font-display pb-1 text-4xl font-semibold text-[#c9a227]">↑</span></div><p className="mt-3 text-[10px] uppercase tracking-[.16em] text-white/60">Remote support / built to scale</p></div>
           </div>
