@@ -25,7 +25,9 @@ const heroImage = "/manus-storage/callcare-hero_b927f0fa.png";
 const operationsImage = "/manus-storage/callcare-operations_3f2206be.png";
 const servicesImage = "/manus-storage/callcare-services_bb91f26c.png";
 const teamImage = "/manus-storage/callcare-team_dc14a11a.png";
-const markImage = "/manus-storage/callcare-mark_e1fd1a24.png";
+const logoPrimary = "/brand/logo_primary_horizontal.svg";
+const logoIconCream = "/brand/icon_mono_cream.svg";
+const logoIconDark = "/brand/icon_mono_dark.svg";
 
 const services = [
   {
@@ -67,16 +69,18 @@ const services = [
 
 const industries = ["E-commerce", "SaaS", "Healthcare", "Service businesses", "Real estate", "Digital agencies"];
 
-function Logo({ light = false, showTagline = false }: { light?: boolean; showTagline?: boolean }) {
+function Logo({ light = false, full = false }: { light?: boolean; full?: boolean }) {
+  if (full) {
+    return <a href="#top" className="group inline-flex max-w-[225px] items-center bg-[#f6f3ec] px-4 py-3" aria-label="CallCare BPO home"><img src={logoPrimary} alt="CallCare BPO" className="h-auto w-full" /></a>;
+  }
+
   return (
     <a href="#top" className="group inline-flex items-center gap-3" aria-label="CallCare BPO home">
-      <span className={`relative grid size-11 place-items-center overflow-hidden rounded-[13px] border ${light ? "border-white/20 bg-[#e8f0e9]" : "border-[#9db9a9] bg-[#0b4f3b]"}`}>
-        <img src={markImage} alt="" className="size-8 object-contain" />
-        <span className="absolute bottom-1 right-1 size-1.5 rounded-full bg-[#d99a3d]" />
+      <span className={`grid size-11 place-items-center overflow-hidden rounded-[13px] border ${light ? "border-white/20 bg-[#e8f0e9]" : "border-[#9db9a9] bg-[#0b4f3b]"}`}>
+        <img src={light ? logoIconCream : logoIconDark} alt="" className="size-8 object-contain" />
       </span>
       <span className={`font-display text-[16px] font-bold tracking-[-.05em] ${light ? "text-white" : "text-[#123d31]"}`}>
-        CALLCARE <span className={light ? "text-[#d99a3d]" : "text-[#4a7d6b]"}>BPO</span>{showTagline && <span className={`ml-2 align-middle font-sans text-[9px] font-bold tracking-[.12em] ${light ? "text-[#b8d0c3]" : "text-[#88a59a]"}`}>/ OPERATIONS</span>}
-        {showTagline && <span className="mt-1 block h-px w-14 bg-[#d99a3d]" />}
+        CALLCARE <span className={light ? "text-[#d99a3d]" : "text-[#4a7d6b]"}>BPO</span>
       </span>
     </a>
   );
@@ -168,7 +172,7 @@ export default function Home() {
         <section id="contact" className="relative overflow-hidden bg-[#dceae0] px-5 py-24 lg:px-10 lg:py-32"><div className="absolute -right-20 -top-20 size-80 rounded-full border-[36px] border-[#c2d9ca] opacity-60" /><div className="relative mx-auto grid max-w-[1280px] gap-14 lg:grid-cols-[1fr_.9fr] lg:gap-24"><div><SectionLabel index="06" label="Let’s work together" /><h2 className="mt-10 max-w-[600px] font-display text-[clamp(2.9rem,5vw,5.6rem)] font-semibold leading-[.94] tracking-[-.07em]">Tell us where the pressure is.</h2><p className="mt-8 max-w-[470px] text-[17px] leading-8 text-[#57776b]">We’ll map the right support around it. Share a little about your business and we’ll come back with a thoughtful next step.</p><div className="mt-12 space-y-4 border-t border-[#a8c2b1] pt-6 text-sm text-[#315b4d]"><div className="flex items-center gap-3"><MessageCircle size={17} className="text-[#0b4f3b]" /> +254 700 000 000</div><div className="flex items-center gap-3"><Send size={17} className="text-[#0b4f3b]" /> info@callcarebpo.com</div><div className="flex items-center gap-3"><BriefcaseBusiness size={17} className="text-[#0b4f3b]" /> Nairobi, Kenya</div></div></div><form onSubmit={handleSubmit} className="bg-[#f6f3ec] p-6 shadow-[0_20px_60px_rgba(11,79,59,.1)] sm:p-8"><div className="mb-7 flex items-center justify-between"><span className="eyebrow text-[#76958b]">Start a conversation</span><Sparkles size={18} className="text-[#d99a3d]" /></div>{submitted ? <div className="flex min-h-[340px] flex-col items-start justify-center"><span className="mb-5 grid size-12 place-items-center rounded-full bg-[#dceae0] text-[#0b4f3b]"><Check /></span><h3 className="font-display text-3xl font-semibold tracking-[-.05em]">Message ready.</h3><p className="mt-3 max-w-[320px] text-sm leading-6 text-[#57776b]">Thanks for reaching out. We’ll review the details and follow up with the next step.</p><button type="button" onClick={() => setSubmitted(false)} className="mt-8 text-sm font-bold text-[#0b4f3b] underline underline-offset-4">Send another message</button></div> : <div className="space-y-5"><label className="block"><span className="mb-2 block text-xs font-bold uppercase tracking-[.12em] text-[#76958b]">Your name</span><input required name="name" className="w-full border-b border-[#b8cbc0] bg-transparent px-0 py-3 text-sm outline-none placeholder:text-[#9ab1a5] focus:border-[#0b4f3b]" placeholder="Jane Smith" /></label><label className="block"><span className="mb-2 block text-xs font-bold uppercase tracking-[.12em] text-[#76958b]">Work email</span><input required type="email" name="email" className="w-full border-b border-[#b8cbc0] bg-transparent px-0 py-3 text-sm outline-none placeholder:text-[#9ab1a5] focus:border-[#0b4f3b]" placeholder="jane@company.com" /></label><label className="block"><span className="mb-2 block text-xs font-bold uppercase tracking-[.12em] text-[#76958b]">What would you like support with?</span><textarea required name="message" rows={4} className="w-full resize-none border-b border-[#b8cbc0] bg-transparent px-0 py-3 text-sm outline-none placeholder:text-[#9ab1a5] focus:border-[#0b4f3b]" placeholder="Tell us what is taking up too much of your team’s time..." /></label><button className="mt-3 inline-flex w-full items-center justify-center gap-3 bg-[#0b4f3b] px-5 py-4 text-sm font-bold text-white hover:bg-[#12644c]">Send enquiry <ArrowUpRight size={17} /></button><p className="text-center text-[11px] leading-5 text-[#8ba49a]">We’ll use your details only to respond to this enquiry.</p></div>}</form></div></section>
       </main>
 
-      <footer className="bg-[#073a2d] px-5 py-10 text-[#c5d9cd] lg:px-10"><div className="mx-auto flex max-w-[1280px] flex-col justify-between gap-8 sm:flex-row sm:items-end"><div><Logo light showTagline /><p className="mt-5 max-w-[260px] text-sm leading-6 text-[#9fbdad]">Your partner in growth. Our commitment to excellence.</p></div><div className="flex flex-col gap-2 text-right text-xs text-[#9fbdad]"><a href="mailto:info@callcarebpo.com" className="hover:text-white">info@callcarebpo.com</a><a href="tel:+254700000000" className="hover:text-white">+254 700 000 000</a><span>© {new Date().getFullYear()} CallCare BPO</span></div></div></footer>
+      <footer className="bg-[#073a2d] px-5 py-10 text-[#c5d9cd] lg:px-10"><div className="mx-auto flex max-w-[1280px] flex-col justify-between gap-8 sm:flex-row sm:items-end"><div><Logo full /><p className="mt-5 max-w-[260px] text-sm leading-6 text-[#9fbdad]">Your partner in growth. Our commitment to excellence.</p></div><div className="flex flex-col gap-2 text-right text-xs text-[#9fbdad]"><a href="mailto:info@callcarebpo.com" className="hover:text-white">info@callcarebpo.com</a><a href="tel:+254700000000" className="hover:text-white">+254 700 000 000</a><span>© {new Date().getFullYear()} CallCare BPO</span></div></div></footer>
     </div>
   );
 }
