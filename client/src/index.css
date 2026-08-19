@@ -96,6 +96,27 @@ button:active, a:active { transform: scale(.975); }
 .reveal { animation: reveal 700ms cubic-bezier(.22,.61,.36,1) both; }
 @keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 
+h1, h2, h3 { word-spacing: .018em; }
+
+@media (max-width: 1023px) {
+  main > section:not(:first-child) { padding-top: 88px !important; padding-bottom: 88px !important; }
+  .hero-noise, .hero-noise > .relative { min-height: 650px !important; }
+  .hero-noise > .relative { padding-top: 112px !important; padding-bottom: 56px !important; }
+  footer { padding: 36px 28px !important; }
+}
+
+@media (max-width: 767px) {
+  main > section:not(:first-child) { padding-top: 68px !important; padding-bottom: 68px !important; }
+  .hero-noise, .hero-noise > .relative { min-height: 610px !important; }
+  .hero-noise > .relative { padding: 92px 20px 48px !important; }
+  .hero-noise h1 { max-width: 100%; font-size: clamp(2.8rem, 13vw, 4.2rem); line-height: .96; word-spacing: .025em; }
+  .hero-noise p { max-width: 100%; font-size: 15px; line-height: 1.65; }
+  .hero-noise .bar-graph, .hero-noise > .relative > div:last-child { display: none; }
+  footer { padding: 30px 20px !important; }
+  footer > div { gap: 28px !important; }
+  footer > div > div:last-child { text-align: left !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-ring, .growth-card::after, .industry-tile { animation: none !important; transform: none !important; }
   html { scroll-behavior: auto; }
