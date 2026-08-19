@@ -21,10 +21,10 @@ import {
   X,
 } from "lucide-react";
 
-const heroImage = "/manus-storage/callcare-hero_b927f0fa.png";
-const operationsImage = "/manus-storage/callcare-operations_3f2206be.png";
-const servicesImage = "/manus-storage/callcare-services_bb91f26c.png";
-const teamImage = "/manus-storage/callcare-team_dc14a11a.png";
+const heroImage = "/media/callcare-hero.png";
+const operationsImage = "/media/callcare-hero.png";
+const servicesImage = "/media/callcare-hero.png";
+const teamImage = "/media/callcare-hero.png";
 const logoPrimary = "/brand/logo_primary_horizontal.svg";
 const logoIconCream = "/brand/callcare-symbol-exact.svg";
 const logoIconDark = "/brand/callcare-symbol-exact.svg";
