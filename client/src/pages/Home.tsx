@@ -26,8 +26,8 @@ const operationsImage = "/manus-storage/callcare-operations_3f2206be.png";
 const servicesImage = "/manus-storage/callcare-services_bb91f26c.png";
 const teamImage = "/manus-storage/callcare-team_dc14a11a.png";
 const logoPrimary = "/brand/logo_primary_horizontal.svg";
-const logoIconCream = "/brand/icon_favicon.svg";
-const logoIconDark = "/brand/icon_mono_dark.svg";
+const logoIconCream = "/brand/callcare-symbol-exact.svg";
+const logoIconDark = "/brand/callcare-symbol-exact.svg";
 
 const services = [
   {
