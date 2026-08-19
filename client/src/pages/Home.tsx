@@ -76,7 +76,7 @@ function Logo({ light = false, full = false }: { light?: boolean; full?: boolean
 
   return (
     <a href="#top" className="group inline-flex items-center gap-3" aria-label="CallCare BPO home">
-      <span className={`grid size-11 place-items-center overflow-hidden rounded-[13px] border ${light ? "border-white/20 bg-[#eef6f1]" : "border-[#9db9a9] bg-[#27503e]"}`}>
+      <span className={`grid size-11 place-items-center overflow-hidden rounded-[13px] border ${light ? "border-white/20 bg-[#eef6f1]" : "border-[#c9a227]/35 bg-[#fbfdfc] shadow-[0_8px_18px_-14px_rgba(23,50,38,.55)]"}`}>
         <img src={light ? logoIconCream : logoIconDark} alt="" className="size-8 object-contain" />
       </span>
       <span className={`font-display text-[16px] font-bold tracking-[-.05em] ${light ? "text-white" : "text-[#173226]"}`}>
