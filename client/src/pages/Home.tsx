@@ -131,7 +131,7 @@ export default function Home() {
             ))}
           </nav>
           <a href="#contact" className="hidden items-center gap-2 rounded-full bg-[#27503e] px-4 py-2.5 text-[12px] font-bold text-white shadow-[0_12px_24px_-16px_rgba(39,80,62,.7)] hover:-translate-y-0.5 hover:bg-[#173226] sm:inline-flex">Talk to our team <ArrowUpRight size={15} /></a>
-          <button className="text-[#27503e] md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen((v) => !v)}>{menuOpen ? <X /> : <Menu />}</button>
+          <button className="inline-flex size-11 items-center justify-center text-[#27503e] md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen((v) => !v)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
         </div>
         {menuOpen && <nav className="border-t border-[#173226]/10 bg-[#fbfdfc] px-5 py-5 md:hidden"><div className="flex flex-col gap-5">{[['Services', '#services'], ['Process', '#process'], ['Who we help', '#industries'], ['About', '#about'], ['Start a conversation', '#contact']].map(([label, href]) => <a key={label} href={href} onClick={() => setMenuOpen(false)} className="text-sm text-[#4d6459] hover:text-[#27503e]">{label}</a>)}</div></nav>}
       </header>
