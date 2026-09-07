@@ -4,5 +4,10 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "dist/public",
   "cleanUrls": true,
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/careers", "destination": "/index.html" },
+    { "source": "/careers/(.*)", "destination": "/index.html" },
+    { "source": "/recruitment-preview", "destination": "/index.html" },
+    { "source": "/recruitment-preview/(.*)", "destination": "/index.html" }
+  ]
 }
