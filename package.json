@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist && mkdir -p dist/public/careers dist/public/careers/jobs/customer-service-representative dist/public/careers/jobs/sales-appointment-setter dist/public/recruitment-preview && cp dist/public/index.html dist/public/careers/index.html && cp dist/public/index.html dist/public/careers/jobs/customer-service-representative/index.html && cp dist/public/index.html dist/public/careers/jobs/sales-appointment-setter/index.html && cp dist/public/index.html dist/public/recruitment-preview/index.html",
     "start": "NODE_ENV=production node dist/index.js",
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
