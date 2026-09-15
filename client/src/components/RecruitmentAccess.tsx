@@ -3,7 +3,11 @@ import type { Session } from "@supabase/supabase-js";
 import { Link } from "wouter";
 import { Loader2, LogOut } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { errorMessage, FOUNDER_EMAIL } from "@/lib/recruitment";
+import {
+  errorMessage,
+  FOUNDER_EMAIL,
+  RECRUITER_EMAILS,
+} from "@/lib/recruitment";
 
 type Access = { token: string; userId: string; email: string };
 
@@ -51,7 +55,7 @@ export default function RecruitmentAccess({
         if (userError) throw userError;
         if (
           data.user?.id !== session!.user.id ||
-          data.user?.email?.toLowerCase() !== FOUNDER_EMAIL
+          !RECRUITER_EMAILS.includes(data.user?.email?.toLowerCase() ?? "")
         ) {
           throw new Error(
             "This workspace is restricted to the authorized CallCare account."
@@ -178,8 +182,9 @@ export function LoginState({ externalError = "" }: { externalError?: string }) {
     if (!supabase || working) return;
     setError("");
     setMessage("");
-    if (email.trim().toLowerCase() !== FOUNDER_EMAIL) {
-      setError(`Use ${FOUNDER_EMAIL} to access this workspace.`);
+    const loginEmail = email.trim().toLowerCase();
+    if (!RECRUITER_EMAILS.includes(loginEmail)) {
+      setError("Use an authorized recruiter email to access this workspace.");
       return;
     }
     setWorking(true);
@@ -187,11 +192,11 @@ export function LoginState({ externalError = "" }: { externalError?: string }) {
       const result =
         mode === "password"
           ? await supabase.auth.signInWithPassword({
-              email: FOUNDER_EMAIL,
+              email: loginEmail,
               password,
             })
           : await supabase.auth.signInWithOtp({
-              email: FOUNDER_EMAIL,
+              email: loginEmail,
               options: {
                 shouldCreateUser: false,
                 emailRedirectTo: `${window.location.origin}/recruitment-preview`,
@@ -224,7 +229,7 @@ export function LoginState({ externalError = "" }: { externalError?: string }) {
       </h1>
       <p className="mt-4 text-sm leading-6 text-[#6c8479]">
         {mode === "password"
-          ? "Use your CallCare email and password."
+          ? "Use your authorized recruiter email and password."
           : "We'll email you a secure link to sign in."}
       </p>
       <form onSubmit={signIn} className="mt-7 space-y-4">

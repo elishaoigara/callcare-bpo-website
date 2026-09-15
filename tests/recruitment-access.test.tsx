@@ -150,3 +150,49 @@ it("uses password login by default and disables account creation in magic fallba
     })
   );
 });
+
+it("allows Lambert's verified active recruiter session", async () => {
+  const lambert = {
+    access_token: "lambert-token",
+    user: { id: "lambert", email: "lambertelisha732@gmail.com" },
+  };
+  mock.getUser.mockResolvedValue({ data: { user: lambert.user }, error: null });
+  mount();
+  act(() => mock.callback!("INITIAL_SESSION", lambert));
+  await screen.findByText("Private candidate details");
+  expect(mock.rpc).toHaveBeenCalledWith("is_recruiter");
+});
+
+it("uses Lambert's entered address for password and magic-link login", async () => {
+  render(<LoginState />);
+  fireEvent.change(screen.getByLabelText("Email"), {
+    target: { value: "lambertelisha732@gmail.com" },
+  });
+  fireEvent.change(screen.getByLabelText("Password"), {
+    target: { value: "test password only" },
+  });
+  fireEvent.submit(
+    screen.getByRole("button", { name: "Sign in" }).closest("form")!
+  );
+  await waitFor(() =>
+    expect(mock.signInWithPassword).toHaveBeenCalledWith({
+      email: "lambertelisha732@gmail.com",
+      password: "test password only",
+    })
+  );
+  fireEvent.click(screen.getByRole("button", { name: /Use an email link/ }));
+  fireEvent.submit(
+    screen
+      .getByRole("button", { name: "Send secure email link" })
+      .closest("form")!
+  );
+  await waitFor(() =>
+    expect(mock.signInWithOtp).toHaveBeenCalledWith({
+      email: "lambertelisha732@gmail.com",
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `${window.location.origin}/recruitment-preview`,
+      },
+    })
+  );
+});

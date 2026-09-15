@@ -98,7 +98,7 @@ returns boolean language sql stable security definer set search_path = '' as $$
   select exists (
     select 1 from public.recruiter_users r join auth.users u on u.id = r.user_id
     where r.user_id = auth.uid() and r.active
-      and lower(u.email) = 'info@callcarebpo.com' and u.email_confirmed_at is not null
+      and lower(u.email) in ('info@callcarebpo.com', 'lambertelisha732@gmail.com') and u.email_confirmed_at is not null
   );
 $$;
 

@@ -1,4 +1,5 @@
 export const FOUNDER_EMAIL = "info@callcarebpo.com";
+export const RECRUITER_EMAILS = [FOUNDER_EMAIL, "lambertelisha732@gmail.com"];
 export const MAX_CV_BYTES = 10 * 1024 * 1024;
 export const CV_TYPES = {
   pdf: "application/pdf",
