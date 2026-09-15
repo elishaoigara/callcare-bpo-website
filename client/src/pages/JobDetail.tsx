@@ -176,6 +176,7 @@ export default function JobDetail() {
             </div>
             <div className="border border-[#d5e2d9] bg-[#fbfdfc] p-6 sm:p-8 lg:p-10">
               <ApplicationForm
+                key={job.slug}
                 jobTitle={job.title}
                 jobSlug={job.slug}
                 portfolioRequired={job.portfolioRequired}

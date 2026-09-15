@@ -1,6 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { cvContentType } from "./recruitment";
 
+export class ApplicationRejectedError extends Error {}
+
 export type Submission = {
   id: string;
   token: string;
@@ -23,7 +25,11 @@ export async function submitApplication(
     p_details: details,
     p_cv: cv ? { name: cv.name, size: cv.size, mime: cvContentType(cv) } : null,
   });
-  if (error) throw error;
+  if (error) {
+    if (error.code === "P0001")
+      throw new ApplicationRejectedError(error.message);
+    throw error;
+  }
   if (!data?.application_id)
     throw new Error("We couldn't confirm your application. Please retry.");
   onSaved();

@@ -12,7 +12,12 @@ export function cvContentType(file: Pick<File, "name" | "size">) {
     .split(".")
     .pop()
     ?.toLowerCase() as keyof typeof CV_TYPES;
-  if (!CV_TYPES[extension] || file.size <= 0 || file.size > MAX_CV_BYTES) {
+  if (
+    !CV_TYPES[extension] ||
+    file.name.length > 240 ||
+    file.size <= 0 ||
+    file.size > MAX_CV_BYTES
+  ) {
     throw new Error("Please choose a PDF or Word CV up to 10 MB.");
   }
   return CV_TYPES[extension];

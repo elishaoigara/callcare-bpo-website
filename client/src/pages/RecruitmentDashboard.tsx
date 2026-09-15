@@ -12,6 +12,12 @@ import { Link } from "wouter";
 import { supabase } from "@/lib/supabase";
 
 import RecruitmentAccess from "@/components/RecruitmentAccess";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import PasswordSettings from "@/components/PasswordSettings";
 import {
   applicationRole,
@@ -90,6 +96,12 @@ export function RecruitmentWorkspace({
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<"all" | Status>("all");
   const [selected, setSelected] = useState<Application | null>(null);
+  const [reload, setReload] = useState(0);
+  const [cvLink, setCvLink] = useState<{ id: string; url: string } | null>(
+    null
+  );
+  const [cvBusy, setCvBusy] = useState(false);
+  const openButton = useRef<HTMLButtonElement | null>(null);
   const [loading, setLoading] = useState(true);
   const [working, setWorking] = useState(false);
   const mutationPending = useRef(false);
@@ -108,6 +120,8 @@ export function RecruitmentWorkspace({
   useEffect(() => {
     const client = supabase;
     if (!client) return;
+    setLoading(true);
+    setError("");
     const controller = new AbortController();
     async function loadApplications() {
       try {
@@ -140,7 +154,7 @@ export function RecruitmentWorkspace({
     }
     void loadApplications();
     return () => controller.abort();
-  }, []);
+  }, [reload]);
 
   const filtered = useMemo(
     () =>
@@ -148,7 +162,7 @@ export function RecruitmentWorkspace({
         const text =
           `${application.full_name} ${application.email} ${applicationRole(application)} ${application.introduction ?? ""}`.toLowerCase();
         return (
-          text.includes(query.toLowerCase()) &&
+          text.includes(query.trim().toLowerCase()) &&
           (status === "all" || application.status === status)
         );
       }),
@@ -169,6 +183,7 @@ export function RecruitmentWorkspace({
         .select("id,status")
         .single();
       if (updateError || !data) throw updateError;
+      if (!mounted.current) return;
       const updated = { ...application, status: data.status as Status };
       setApplications(items =>
         items.map(item => (item.id === application.id ? updated : item))
@@ -188,30 +203,35 @@ export function RecruitmentWorkspace({
 
   async function openCv(application: Application) {
     if (!supabase || !application.cv_storage_path) return;
-    // Open during the click gesture; opening only after await can be blocked.
+    if (cvBusy) return;
+    setCvBusy(true);
+    setCvLink(null);
+    setError("");
     const tab = window.open("about:blank", "_blank");
-    if (!tab) {
-      setError("Allow pop-ups for this site to open candidate CVs.");
-      return;
+    if (tab) {
+      tab.opener = null;
+      pendingCvWindows.current.add(tab);
     }
-    tab.opener = null;
-    pendingCvWindows.current.add(tab);
     try {
       const { data, error: signedError } = await supabase.storage
         .from("candidate-cvs")
         .createSignedUrl(application.cv_storage_path, 300);
       if (!mounted.current) {
-        tab.close();
+        tab?.close();
         return;
       }
       if (signedError || !data?.signedUrl) throw signedError;
-      tab.location.replace(data.signedUrl);
+      setCvLink({ id: application.id, url: data.signedUrl });
+      if (tab && !tab.closed) tab.location.replace(data.signedUrl);
     } catch {
-      tab.close();
+      tab?.close();
       if (mounted.current)
-        setError("We couldn't open this CV. Please try again.");
+        setError(
+          "We couldn't open this CV. Please try again. Your application record has not been changed."
+        );
     } finally {
-      pendingCvWindows.current.delete(tab);
+      if (tab) pendingCvWindows.current.delete(tab);
+      if (mounted.current) setCvBusy(false);
     }
   }
 
@@ -248,7 +268,7 @@ export function RecruitmentWorkspace({
         </div>
       </header>
       <div className="mx-auto flex max-w-[1440px]">
-        <aside className="hidden min-h-[calc(100vh-73px)] w-[230px] shrink-0 border-r border-[#d5e2d9] bg-[#fbfdfc] p-5 lg:block">
+        <aside className="hidden min-h-[calc(100vh-73px)] w-[230px] shrink-0 border-r border-[#d5e2d9] bg-[#fbfdfc] p-5 xl:block">
           <p className="eyebrow mb-5 text-[#7d9e92]">Recruitment</p>
           <nav className="space-y-1">
             <a
@@ -296,7 +316,10 @@ export function RecruitmentWorkspace({
             </div>
           </div>
           {error && (
-            <p className="mt-5 border border-[#e7b4ad] bg-[#fff5f3] px-4 py-3 text-sm text-[#9a4139]">
+            <p
+              role="alert"
+              className="mt-5 border border-[#e7b4ad] bg-[#fff5f3] px-4 py-3 text-sm text-[#9a4139]"
+            >
               {error}
             </p>
           )}
@@ -327,7 +350,7 @@ export function RecruitmentWorkspace({
             id="applications"
             className="mt-8 border border-[#d5e2d9] bg-[#fbfdfc]"
           >
-            <div className="flex flex-col justify-between gap-4 border-b border-[#d5e2d9] p-5 sm:flex-row sm:items-center">
+            <div className="flex flex-col justify-between gap-4 border-b border-[#d5e2d9] p-5 xl:flex-row xl:items-center">
               <div>
                 <h2 className="font-display text-2xl font-semibold tracking-[-.04em]">
                   Applications
@@ -337,10 +360,19 @@ export function RecruitmentWorkspace({
                   pipeline.
                 </p>
               </div>
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={loading || working}
+                  onClick={() => setReload(n => n + 1)}
+                  className="border border-[#d5e2d9] px-3 py-2 text-sm font-semibold disabled:opacity-50"
+                >
+                  {loading ? "Loading…" : "Refresh applications"}
+                </button>
                 <label className="flex items-center gap-2 border border-[#d5e2d9] px-3 py-2 text-sm text-[#6d8579]">
                   <Search size={15} />
                   <input
+                    aria-label="Search candidates"
                     value={query}
                     onChange={event => setQuery(event.target.value)}
                     placeholder="Search candidates"
@@ -348,6 +380,7 @@ export function RecruitmentWorkspace({
                   />
                 </label>
                 <select
+                  aria-label="Filter by status"
                   value={status}
                   onChange={event =>
                     setStatus(event.target.value as "all" | Status)
@@ -414,7 +447,13 @@ export function RecruitmentWorkspace({
                       </td>
                       <td className="px-5 py-4">
                         <button
-                          onClick={() => setSelected(application)}
+                          onClick={event => {
+                            openButton.current = event.currentTarget;
+                            setCvLink(null);
+                            setError("");
+                            setSelected(application);
+                          }}
+                          aria-label={`Open application for ${application.full_name}`}
                           className="inline-flex items-center gap-2 text-sm font-bold text-[#27503e]"
                         >
                           Open <ArrowUpRight size={15} />
@@ -438,82 +477,138 @@ export function RecruitmentWorkspace({
               </table>
             </div>
           </section>
-          {selected && (
-            <section className="mt-8 border border-[#d5e2d9] bg-[#fbfdfc] p-6 sm:p-8">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <p className="section-kicker">Candidate detail</p>
-                  <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-.05em]">
-                    {selected.full_name}
-                  </h2>
-                  <p className="mt-2 text-sm text-[#577468]">
-                    {selected.email} {selected.phone && `· ${selected.phone}`}
+          <Dialog
+            open={!!selected}
+            onOpenChange={open => {
+              if (!open) {
+                setSelected(null);
+                setCvLink(null);
+              }
+            }}
+          >
+            {selected && (
+              <DialogContent
+                onCloseAutoFocus={event => {
+                  event.preventDefault();
+                  openButton.current?.focus();
+                }}
+                className="max-h-[90dvh] overflow-y-auto bg-[#fbfdfc] text-[#173226] sm:max-w-3xl"
+              >
+                {error && (
+                  <p role="alert" className="mr-6 text-sm text-[#9a4139]">
+                    {error}
                   </p>
+                )}
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="section-kicker">Candidate detail</p>
+                    <DialogTitle className="mt-3 pr-6 font-display text-3xl font-semibold tracking-[-.05em]">
+                      {selected.full_name}
+                    </DialogTitle>
+                    <DialogDescription className="mt-2">
+                      {applicationRole(selected)} ·{" "}
+                      {selected.location || "Location not provided"}
+                    </DialogDescription>
+                    <p className="mt-2 text-sm text-[#577468]">
+                      {selected.email} {selected.phone && `· ${selected.phone}`}
+                    </p>
+                  </div>
                 </div>
-                <button
-                  onClick={() => setSelected(null)}
-                  className="text-sm font-bold text-[#27503e]"
-                >
-                  Close
-                </button>
-              </div>
-              <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_.75fr]">
-                <div>
-                  <p className="text-sm leading-7 text-[#516b5e]">
-                    {applicationIntroduction(selected)}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#577468]">
-                    {selected.years_experience && (
-                      <span className="rounded-full bg-[#eaf3ee] px-3 py-2">
-                        {selected.years_experience}
-                      </span>
+                <div className="mt-4">
+                  <label className="text-sm font-semibold">
+                    Application status
+                    <select
+                      aria-label="Candidate application status"
+                      disabled={working}
+                      value={selected.status}
+                      onChange={event =>
+                        updateStatus(selected, event.target.value as Status)
+                      }
+                      className="ml-3 rounded border p-2"
+                    >
+                      {statuses.map(item => (
+                        <option key={item} value={item}>
+                          {label(item)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_.75fr]">
+                  <div>
+                    <p className="whitespace-pre-wrap break-words text-sm leading-7 text-[#516b5e]">
+                      {applicationIntroduction(selected)}
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-3 text-sm text-[#577468]">
+                      {selected.years_experience && (
+                        <span className="rounded-full bg-[#eaf3ee] px-3 py-2">
+                          {selected.years_experience}
+                        </span>
+                      )}
+                      {selected.availability && (
+                        <span className="rounded-full bg-[#eaf3ee] px-3 py-2">
+                          Available: {selected.availability}
+                        </span>
+                      )}
+                      {safeWebUrl(selected.linkedin_url) && (
+                        <a
+                          href={safeWebUrl(selected.linkedin_url)!}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full bg-[#eaf3ee] px-3 py-2 font-bold text-[#27503e]"
+                        >
+                          LinkedIn
+                        </a>
+                      )}
+                      {safeWebUrl(selected.portfolio_url) && (
+                        <a
+                          href={safeWebUrl(selected.portfolio_url)!}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full bg-[#eaf3ee] px-3 py-2 font-bold text-[#27503e]"
+                        >
+                          Portfolio
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  <div className="border-l border-[#d5e2d9] pl-6">
+                    <p className="eyebrow text-[#7d9e92]">Candidate file</p>
+                    {cvLink?.id === selected.id && (
+                      <p className="mt-3 text-sm">
+                        <a
+                          href={cvLink.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold underline"
+                        >
+                          View or download CV
+                        </a>
+                        <span className="mt-1 block">
+                          Use this link if a new tab did not open. It expires
+                          after five minutes; press Open again for a new link.
+                        </span>
+                      </p>
                     )}
-                    {selected.availability && (
-                      <span className="rounded-full bg-[#eaf3ee] px-3 py-2">
-                        Available: {selected.availability}
-                      </span>
-                    )}
-                    {safeWebUrl(selected.linkedin_url) && (
-                      <a
-                        href={safeWebUrl(selected.linkedin_url)!}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full bg-[#eaf3ee] px-3 py-2 font-bold text-[#27503e]"
+                    {selected.cv_storage_path ? (
+                      <button
+                        disabled={cvBusy}
+                        onClick={() => openCv(selected)}
+                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#27503e] px-4 py-3 text-sm font-bold text-white"
                       >
-                        LinkedIn
-                      </a>
-                    )}
-                    {safeWebUrl(selected.portfolio_url) && (
-                      <a
-                        href={safeWebUrl(selected.portfolio_url)!}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full bg-[#eaf3ee] px-3 py-2 font-bold text-[#27503e]"
-                      >
-                        Portfolio
-                      </a>
+                        <FileText size={16} /> {cvBusy ? "Preparing…" : "Open"}{" "}
+                        {selected.cv_original_name || "CV"}
+                      </button>
+                    ) : (
+                      <p className="mt-4 text-sm text-[#7a9186]">
+                        No CV uploaded.
+                      </p>
                     )}
                   </div>
                 </div>
-                <div className="border-l border-[#d5e2d9] pl-6">
-                  <p className="eyebrow text-[#7d9e92]">Candidate file</p>
-                  {selected.cv_storage_path ? (
-                    <button
-                      onClick={() => openCv(selected)}
-                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#27503e] px-4 py-3 text-sm font-bold text-white"
-                    >
-                      <FileText size={16} /> Open{" "}
-                      {selected.cv_original_name || "CV"}
-                    </button>
-                  ) : (
-                    <p className="mt-4 text-sm text-[#7a9186]">
-                      No CV uploaded.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </section>
-          )}
+              </DialogContent>
+            )}
+          </Dialog>
           <PasswordSettings />
         </main>
       </div>

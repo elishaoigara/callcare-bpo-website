@@ -85,3 +85,26 @@ it("handles missing legacy introductions and MIME-less Word CVs", () => {
   );
   expect(() => cvContentType({ name: "bad.exe", size: 100 })).toThrow();
 });
+
+it("distinguishes a rejected application from an uncertain network response", async () => {
+  const { ApplicationRejectedError } = await import(
+    "../client/src/lib/submit-application"
+  );
+  const rejected = vi
+    .fn()
+    .mockResolvedValue({
+      error: {
+        code: "P0001",
+        message: "Please provide a valid name, email and introduction",
+      },
+    });
+  await expect(
+    submitApplication(client(rejected), ticket, vi.fn())
+  ).rejects.toBeInstanceOf(ApplicationRejectedError);
+  const uncertain = vi
+    .fn()
+    .mockResolvedValue({ error: { message: "Failed to fetch" } });
+  await expect(
+    submitApplication(client(uncertain), ticket, vi.fn())
+  ).rejects.not.toBeInstanceOf(ApplicationRejectedError);
+});

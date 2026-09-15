@@ -3,7 +3,11 @@ import { Loader2, UploadCloud } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 import { cvContentType, safeWebUrl, errorMessage } from "@/lib/recruitment";
-import { submitApplication, type Submission } from "@/lib/submit-application";
+import {
+  ApplicationRejectedError,
+  submitApplication,
+  type Submission,
+} from "@/lib/submit-application";
 
 type ApplicationFormProps = {
   jobTitle: string;
@@ -77,6 +81,8 @@ export default function ApplicationForm({
       if (!submission.current) {
         if (!form.fullName.trim() || !form.introduction.trim())
           throw new Error("Please enter your name and introduction.");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
+          throw new Error("Please enter a valid email address.");
         if (!form.consent)
           throw new Error(
             "Please consent to the recruitment use of your details."
@@ -117,6 +123,8 @@ export default function ApplicationForm({
       setForm(initialState);
       setCv(null);
     } catch (cause) {
+      if (cause instanceof ApplicationRejectedError && !saved)
+        submission.current = null;
       setError(
         submission.current
           ? "We couldn't finish this submission. Please retry below; your details will not be submitted twice. If this continues, email info@callcarebpo.com."
