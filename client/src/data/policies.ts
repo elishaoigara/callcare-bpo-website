@@ -120,7 +120,7 @@ export const policies = {
         title: "Contact Us",
         lines: [
           "If you have questions regarding these Terms & Conditions, contact:",
-          "Legal Name: CallCare BPO",
+          "Legal Name: Callcare Bpo",
           "Email: info@callcarebpo.com",
           "Address: Nairobi, Kenya",
         ],
