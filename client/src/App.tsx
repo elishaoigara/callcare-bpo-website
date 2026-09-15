@@ -10,6 +10,9 @@ import Careers from "@/pages/Careers";
 import JobDetail from "@/pages/JobDetail";
 import RecruitmentDashboard from "@/pages/RecruitmentDashboard";
 
+import Legal from "@/pages/Legal";
+import LegalFooter from "@/components/LegalFooter";
+
 function Router() {
   return (
     <Switch>
@@ -17,6 +20,8 @@ function Router() {
       <Route path="/careers" component={Careers} />
       <Route path="/careers/jobs/:slug" component={JobDetail} />
       <Route path="/recruitment-preview" component={RecruitmentDashboard} />
+      <Route path="/terms">{() => <Legal kind="terms" />}</Route>
+      <Route path="/privacy">{() => <Legal kind="privacy" />}</Route>
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -30,6 +35,7 @@ export default function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <LegalFooter />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

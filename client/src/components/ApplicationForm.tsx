@@ -318,6 +318,28 @@ export default function ApplicationForm({
           {error}
         </p>
       )}
+      <p className="text-sm leading-6 text-[#516b5e]">
+        Read our{" "}
+        <a
+          href="/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Privacy Policy (opens in a new tab)
+        </a>{" "}
+        for how we handle your details and retain them for future opportunities,
+        and our{" "}
+        <a
+          href="/terms"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-4"
+        >
+          Terms &amp; Conditions (opens in a new tab)
+        </a>
+        . Joining the talent pool does not guarantee employment.
+      </p>
       <button
         type="submit"
         disabled={state === "submitting"}

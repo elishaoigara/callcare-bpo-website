@@ -2,6 +2,8 @@ import { copyFile, mkdir } from "node:fs/promises";
 import { jobs } from "../client/src/data/careers.ts";
 const routes = [
   "careers",
+  "terms",
+  "privacy",
   "recruitment-preview",
   ...jobs
     .filter(job => job.status === "open")
