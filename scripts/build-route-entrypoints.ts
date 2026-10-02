@@ -2,6 +2,7 @@ import { copyFile, mkdir } from "node:fs/promises";
 import { jobs } from "../client/src/data/careers.ts";
 const routes = [
   "careers",
+  "operations",
   "terms",
   "privacy",
   "recruitment-preview",

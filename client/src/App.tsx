@@ -5,6 +5,7 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import Operations from "@/pages/Operations";
 import Home from "@/pages/Home";
 import Careers from "@/pages/Careers";
 import JobDetail from "@/pages/JobDetail";
@@ -17,6 +18,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/operations" component={Operations} />
       <Route path="/careers" component={Careers} />
       <Route path="/careers/jobs/:slug" component={JobDetail} />
       <Route path="/recruitment-preview" component={RecruitmentDashboard} />

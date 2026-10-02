@@ -4,9 +4,15 @@ export default function LegalFooter() {
       <div className="mx-auto flex max-w-[1280px] flex-wrap items-center justify-between gap-4 text-xs">
         <span>© {new Date().getFullYear()} CallCare BPO</span>
         <nav
-          aria-label="Legal information"
+          aria-label="Footer navigation"
           className="flex flex-wrap gap-x-6 gap-y-3"
         >
+          <a
+            href="/operations"
+            className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-white"
+          >
+            Our Operations
+          </a>
           <a
             href="/privacy"
             className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-white"
