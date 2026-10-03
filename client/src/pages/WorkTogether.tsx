@@ -116,6 +116,7 @@ export default function WorkTogether() {
   const [sending, setSending] = useState(false);
   const [complete, setComplete] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const requestInFlight = useRef(false);
   useEffect(() => {
     const previous = document.title;
@@ -127,7 +128,7 @@ export default function WorkTogether() {
   useEffect(() => {
     if (started) {
       headingRef.current?.focus({ preventScroll: true });
-      headingRef.current?.scrollIntoView({ block: "start" });
+      panelRef.current?.scrollIntoView({ block: "start" });
     }
   }, [step, started, complete]);
   function update(key: keyof Answers, value: string) {
@@ -286,7 +287,7 @@ export default function WorkTogether() {
                 <span>A conversation about your business, at your pace.</span>
               </div>
             </aside>
-            <div className="inquiry-panel">
+            <div className="inquiry-panel" ref={panelRef}>
               {!started ? (
                 <div className="inquiry-start">
                   <span className="inquiry-symbol">

@@ -160,11 +160,20 @@ describe("Separate Contact page", () => {
         .getAttribute("href")
     ).toBe("mailto:info@callcarebpo.com");
     expect(container.querySelector("form")).toBeNull();
-    expect(container.querySelector("iframe")).toBeNull();
+    expect(
+      container.querySelector('img[src^="https://tile.openstreetmap.org"]')
+    ).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "View Nairobi Map" }));
-    expect(container.querySelector("iframe")?.title).toContain(
-      "not an office address"
+    expect(
+      screen.getByRole("img", { name: /Map centered on Nairobi/ })
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("link", { name: "© OpenStreetMap contributors" })
+    ).toBeTruthy();
+    fireEvent.error(
+      container.querySelector('img[src^="https://tile.openstreetmap.org"]')!
     );
+    expect(screen.getByRole("status").textContent).toContain("couldn’t load");
     screen
       .getAllByRole("link", { name: "Let’s Work Together" })
       .forEach(link => expect(link.getAttribute("href")).toBe("/work-with-us"));

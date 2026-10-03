@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -8,12 +8,12 @@ import {
   Phone,
   Radio,
 } from "lucide-react";
+import NairobiMap from "@/components/NairobiMap";
 import PublicHeader from "@/components/PublicHeader";
 import { publicContact } from "@/lib/publicContact";
 import "./engagement.css";
 
 export default function Contact() {
-  const [mapLoaded, setMapLoaded] = useState(false);
   useEffect(() => {
     const previous = document.title;
     document.title = "Contact | CallCare BPO";
@@ -62,48 +62,7 @@ export default function Contact() {
                 </div>
               </div>
             </div>
-            <div className="nairobi-map">
-              {mapLoaded ? (
-                <iframe
-                  title="Map centered on Nairobi, Kenya — city location, not an office address"
-                  src="https://www.openstreetmap.org/export/embed.html?bbox=36.754%2C-1.335%2C36.89%2C-1.24&layer=mapnik&marker=-1.2875%2C36.822"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <div
-                  className="map-preview"
-                  aria-label="Illustrative city map preview"
-                >
-                  <div className="map-road map-road-one" />
-                  <div className="map-road map-road-two" />
-                  <div className="map-road map-road-three" />
-                  <span className="map-place map-place-top">Kenya</span>
-                  <span className="map-place map-place-bottom">
-                    City location
-                  </span>
-                </div>
-              )}
-              <div
-                className={mapLoaded ? "map-brand" : "map-marker"}
-                aria-hidden="true"
-              >
-                <img src="/brand/callcare-symbol-exact.svg" alt="" />
-                <span>Nairobi</span>
-              </div>
-              {!mapLoaded && (
-                <div className="map-load">
-                  <button
-                    type="button"
-                    className="cc-button"
-                    onClick={() => setMapLoaded(true)}
-                  >
-                    View Nairobi Map <ArrowUpRight size={16} />
-                  </button>
-                  <span>Loads OpenStreetMap. Marker indicates the city.</span>
-                </div>
-              )}
-            </div>
+            <NairobiMap />
           </div>
         </section>
         <section className="cc-section contact-details">

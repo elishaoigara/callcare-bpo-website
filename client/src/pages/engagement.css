@@ -326,6 +326,7 @@
   flex-shrink: 0;
 }
 .inquiry-panel {
+  scroll-margin-top: 100px;
   background: #fbfdfc;
   padding: 40px;
   border: 1px solid #d5e1d9;
@@ -632,17 +633,62 @@
 .nairobi-map {
   position: relative;
   min-height: 350px;
+  width: 100%;
+  max-width: 480px;
+  justify-self: center;
   border-radius: 20px;
   border: 1px solid #c4d6cb;
   background: #e3eee7;
   overflow: hidden;
   isolation: isolate;
 }
-.nairobi-map iframe {
-  width: 100%;
-  height: 350px;
-  border: 0;
-  display: block;
+.map-tiles {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 768px;
+  height: 768px;
+}
+.map-tiles img {
+  position: absolute;
+  width: 256px;
+  height: 256px;
+  max-width: none;
+}
+.map-attribution {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #fbfdfcee;
+  padding: 4px 8px;
+  font-size: 10px;
+  color: #173226;
+  text-decoration: underline;
+  z-index: 2;
+}
+.map-open {
+  position: absolute;
+  bottom: 32px;
+  left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+.map-open > span {
+  background: #fbfdfc;
+  padding: 6px 10px;
+  font-size: 11px;
+}
+.map-open a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  background: #fbfdfc;
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #173226;
 }
 .map-preview {
   position: absolute;
@@ -714,24 +760,6 @@
   padding: 8px;
   border-radius: 50%;
   box-shadow: 0 6px 20px #17322630;
-}
-.map-brand {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 8px 12px;
-  background: #fbfdfc;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  pointer-events: none;
-}
-.map-brand img {
-  width: 24px;
-  height: 24px;
 }
 .map-marker span {
   background: #fbfdfc;
@@ -965,9 +993,6 @@
   }
   .nairobi-map {
     min-height: 320px;
-  }
-  .nairobi-map iframe {
-    height: 320px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
