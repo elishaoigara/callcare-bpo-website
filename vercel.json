@@ -5,6 +5,8 @@
   "outputDirectory": "dist/public",
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/contact", "destination": "/index.html" },
+    { "source": "/work-with-us", "destination": "/index.html" },
     { "source": "/operations", "destination": "/index.html" },
     { "source": "/careers", "destination": "/index.html" },
     { "source": "/careers/(.*)", "destination": "/index.html" },

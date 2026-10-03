@@ -3,6 +3,8 @@ import { jobs } from "../client/src/data/careers.ts";
 const routes = [
   "careers",
   "operations",
+  "contact",
+  "work-with-us",
   "terms",
   "privacy",
   "recruitment-preview",

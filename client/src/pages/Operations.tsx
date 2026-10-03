@@ -1,3 +1,4 @@
+import PublicHeader from "@/components/PublicHeader";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   ArrowUpRight,
@@ -8,8 +9,6 @@ import {
   Monitor,
   ShieldCheck,
   Layers3,
-  Menu,
-  X,
   ChevronDown,
   Check,
   Activity,
@@ -265,7 +264,7 @@ function Section({
 }
 function CTA({
   children,
-  href = "/#contact",
+  href = "/work-with-us",
   secondary = false,
 }: {
   children: ReactNode;
@@ -409,7 +408,6 @@ function Dashboard({ compact = false }: { compact?: boolean }) {
   );
 }
 export default function Operations() {
-  const [open, setOpen] = useState(false);
   const [activePillar, setActivePillar] = useState(0);
   const [activeLayer, setActiveLayer] = useState(1);
   const [activeDay, setActiveDay] = useState(0);
@@ -420,70 +418,12 @@ export default function Operations() {
       document.title = previous;
     };
   }, []);
-  const links = [
-    ["Services", "/#services"],
-    ["Our Operations", "/operations"],
-    ["Who We Help", "/#industries"],
-    ["About", "/#about"],
-    ["Careers", "/careers"],
-  ];
   return (
     <div className="ops-page bg-[#fbfdfc] text-[#173226]">
       <a href="#operations-content" className="ops-skip">
         Skip to content
       </a>
-      <header className="sticky top-0 z-40 border-b border-[#173226]/10 bg-[#fbfdfc]/95 px-5 backdrop-blur lg:px-10">
-        <div className="mx-auto flex min-h-20 max-w-[1280px] items-center justify-between gap-6">
-          <a href="/" aria-label="CallCare BPO home">
-            <img
-              src="/brand/logo_primary_horizontal.svg"
-              alt="CallCare BPO"
-              className="w-40"
-            />
-          </a>
-          <nav
-            aria-label="Primary navigation"
-            className="hidden gap-6 text-sm md:flex"
-          >
-            {links.map(([label, href]) => (
-              <a
-                key={label}
-                href={href}
-                aria-current={href === "/operations" ? "page" : undefined}
-                className={
-                  href === "/operations"
-                    ? "font-bold text-[#338461]"
-                    : "hover:underline"
-                }
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-          <button
-            className="grid size-12 place-items-center md:hidden"
-            aria-label={open ? "Close navigation" : "Open navigation"}
-            aria-expanded={open}
-            aria-controls="operations-nav"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <X /> : <Menu />}
-          </button>
-        </div>
-        {open && (
-          <nav
-            id="operations-nav"
-            aria-label="Mobile navigation"
-            className="flex flex-col gap-5 pb-6 md:hidden"
-          >
-            {links.map(([label, href]) => (
-              <a key={label} href={href} onClick={() => setOpen(false)}>
-                {label}
-              </a>
-            ))}
-          </nav>
-        )}
-      </header>
+      <PublicHeader current="/operations" />
       <main id="operations-content">
         <section className="ops-hero relative overflow-hidden bg-[#173226] px-5 py-20 text-white lg:px-10 lg:py-28">
           <div className="relative mx-auto grid max-w-[1280px] items-center gap-12 lg:grid-cols-[1.1fr_1fr]">

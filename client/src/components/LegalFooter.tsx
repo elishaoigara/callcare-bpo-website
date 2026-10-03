@@ -13,6 +13,19 @@ export default function LegalFooter() {
           >
             Our Operations
           </a>
+          {[
+            ["Contact", "/contact"],
+            ["Let’s Work Together", "/work-with-us"],
+            ["Careers", "/careers"],
+          ].map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-white"
+            >
+              {label}
+            </a>
+          ))}
           <a
             href="/privacy"
             className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-white"
