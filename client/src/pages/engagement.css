@@ -959,6 +959,17 @@
   .cc-header-inner {
     padding: 10px 20px;
     min-height: 74px;
+    gap: 8px;
+  }
+  .cc-logo img {
+    width: 46px;
+    height: 46px;
+  }
+  .cc-logo-name {
+    font-size: 26px;
+  }
+  .cc-menu {
+    flex-shrink: 0;
   }
   .cc-mobile-nav {
     padding: 0 20px 22px;
