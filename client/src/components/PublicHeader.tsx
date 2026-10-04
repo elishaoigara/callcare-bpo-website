@@ -24,7 +24,20 @@ export default function PublicHeader({ current }: { current: string }) {
     >
       <div className="cc-header-inner">
         <a href="/" aria-label="CallCare BPO home" className="cc-logo">
-          <img src="/brand/logo_primary_horizontal.svg" alt="CallCare BPO" />
+          <img
+            src="/brand/callcare-symbol-exact.svg"
+            alt=""
+            width={54}
+            height={54}
+          />
+          <span className="cc-logo-copy" aria-hidden="true">
+            <span className="cc-logo-name">
+              CallCare <span>BPO</span>
+            </span>
+            <span className="cc-logo-tagline">
+              People · Processes · Performance
+            </span>
+          </span>
         </a>
         <nav aria-label="Primary navigation" className="cc-desktop-nav">
           {links.map(([label, href]) => (
