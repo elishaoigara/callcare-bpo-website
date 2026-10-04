@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { policies } from "@/data/policies";
 
 function Paragraphs({ lines }: { lines: readonly string[] }) {
@@ -46,14 +45,7 @@ function Paragraphs({ lines }: { lines: readonly string[] }) {
 
 export default function Legal({ kind }: { kind: keyof typeof policies }) {
   const policy = policies[kind];
-  useEffect(() => {
-    const previous = document.title;
-    document.title = `${policy.title} | CallCare BPO`;
-    window.scrollTo(0, 0);
-    return () => {
-      document.title = previous;
-    };
-  }, [policy.title]);
+
   return (
     <div className="min-h-screen bg-[#fbfdfc] text-[#173226]">
       <header className="border-b border-[#c4d6cb] px-5 py-5 lg:px-10">

@@ -55,6 +55,9 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+#home-content section[id] { scroll-margin-top: 100px; }
+:is(a, button, input, select, textarea):focus-visible { outline: 3px solid #c9a227; outline-offset: 4px; }
+@media (max-width: 767px) { input:not([type="checkbox"]):not([type="radio"]):not([type="file"]), textarea, select { font-size: 16px !important; } }
 body {
   margin: 0;
   background: #fbfdfc;

@@ -1,5 +1,11 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import ApplicationForm from "../client/src/components/ApplicationForm";
 const mock = vi.hoisted(() => ({ rpc: vi.fn() }));
@@ -7,6 +13,22 @@ vi.mock("@/lib/supabase", () => ({ supabase: { rpc: mock.rpc } }));
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  vi.useRealTimers();
+});
+it("offers the email fallback if the availability check stalls", async () => {
+  vi.useFakeTimers();
+  mock.rpc.mockReturnValue(new Promise(() => {}));
+  render(
+    <ApplicationForm
+      jobTitle="SDR"
+      jobSlug="sales-development-representative"
+    />
+  );
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(12000);
+  });
+  expect(screen.getByRole("link", { name: "Apply by email" })).toBeTruthy();
+  expect(screen.queryByText("Checking application availability…")).toBeNull();
 });
 it("offers email applications while the database upgrade is missing", async () => {
   mock.rpc.mockResolvedValue({

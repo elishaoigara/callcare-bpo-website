@@ -3,11 +3,5 @@
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm build",
   "outputDirectory": "dist/public",
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/careers", "destination": "/index.html" },
-    { "source": "/careers/(.*)", "destination": "/index.html" },
-    { "source": "/recruitment-preview", "destination": "/index.html" },
-    { "source": "/recruitment-preview/(.*)", "destination": "/index.html" }
-  ]
+  "cleanUrls": true
 }

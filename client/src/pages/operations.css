@@ -1,0 +1,100 @@
+.ops-page {
+  overflow-x: clip;
+}
+.ops-page :is(button, a):focus-visible {
+  outline: 3px solid #c9a227;
+  outline-offset: 4px;
+}
+.ops-section {
+  scroll-margin-top: 100px;
+}
+.ops-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(#ffffff05 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff05 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+.ops-skip {
+  position: fixed;
+  top: 0;
+  left: 1rem;
+  transform: translateY(-150%);
+  z-index: 100;
+  background: #c9a227;
+  padding: 1rem;
+  border-radius: 0 0 10px 10px;
+}
+.ops-skip:focus {
+  transform: translateY(0);
+}
+.ops-timeline {
+  position: relative;
+}
+.ops-timeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  bottom: 45px;
+  width: 2px;
+  background: #c4d6cb;
+}
+.ops-step,
+.ops-tool,
+.ops-cta {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.ops-step:hover,
+.ops-tool:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px #1732260b;
+}
+.ops-cta:hover {
+  transform: translateY(-2px);
+}
+.ops-enter {
+  animation: ops-enter 0.65s ease both;
+}
+@keyframes ops-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (min-width: 1024px) {
+  .ops-pillars {
+    position: relative;
+  }
+  .ops-pillars::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    top: 50%;
+    height: 2px;
+    background: #c4d6cb;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ops-page *,
+  .ops-page *::before {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .ops-step:hover,
+  .ops-tool:hover,
+  .ops-cta:hover {
+    transform: none;
+  }
+}
