@@ -1,5 +1,5 @@
 import PublicHeader from "@/components/PublicHeader";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   ArrowUpRight,
   ArrowDown,
@@ -411,13 +411,7 @@ export default function Operations() {
   const [activePillar, setActivePillar] = useState(0);
   const [activeLayer, setActiveLayer] = useState(1);
   const [activeDay, setActiveDay] = useState(0);
-  useEffect(() => {
-    const previous = document.title;
-    document.title = "Our Operations | CallCare BPO";
-    return () => {
-      document.title = previous;
-    };
-  }, []);
+
   return (
     <div className="ops-page bg-[#fbfdfc] text-[#173226]">
       <a href="#operations-content" className="ops-skip">

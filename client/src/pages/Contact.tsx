@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -14,13 +13,6 @@ import { publicContact } from "@/lib/publicContact";
 import "./engagement.css";
 
 export default function Contact() {
-  useEffect(() => {
-    const previous = document.title;
-    document.title = "Contact | CallCare BPO";
-    return () => {
-      document.title = previous;
-    };
-  }, []);
   return (
     <div className="engagement-page contact-page">
       <a href="#contact-content" className="cc-skip">

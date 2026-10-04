@@ -7,7 +7,7 @@ Changes are on `review/our-operations`, in draft PR #1. Client approval is requi
 - `/operations`: interactive behind-the-scenes walkthrough.
 - `/work-with-us`: separate five-step partnership inquiry, using the existing Formspree endpoint `mqpkkkdb`. It submits all answers together after the last step and retains answers on errors.
 - `/contact`: direct contact details and an opt-in OpenStreetMap centered on Nairobi. No street address, international offices, or WhatsApp capability is claimed.
-- Home, Services, Our Operations, About, Contact, and an emphasized Let’s Work Together button appear in the shared public header. Services and About link to existing homepage sections. Careers remains accessible from the footer.
+- Home, Services, Our Operations, Contact, and an emphasized Let’s Work Together button appear in the shared public header. About has been removed from both navigation menus; the homepage About content remains. Services links to the existing homepage section. Careers remains accessible from the footer.
 - The homepage Process section remains. The old inquiry form is replaced by an invitation to the dedicated partnership page.
 
 ## Before production approval
@@ -18,3 +18,13 @@ Changes are on `review/our-operations`, in draft PR #1. Client approval is requi
 4. Review operational descriptions against what CallCare currently provides, and inspect the pages on desktop and mobile.
 
 No payment or escrow behavior is introduced in these pages.
+
+## Final release review — 4 October 2026
+
+- Removed development-only scripts from production and split secondary routes into lazy-loaded bundles.
+- Added route-specific page titles, descriptions, canonical URLs, Open Graph metadata and a generated sitemap. Preview and recruitment pages are marked noindex.
+- Added branded missing-page handling with a real HTTP 404 and retained direct entrypoints for known routes.
+- Removed broken analytics placeholder requests; analytics loads only when valid settings exist.
+- Improved keyboard focus, mobile menu Escape behaviour, browser zoom, image loading and application form responsiveness.
+- A stalled recruitment availability check now offers the email fallback rather than waiting indefinitely.
+- Route, anchor, local image, form validation/retry and recruitment access/schema checks are covered by automated tests. Production data is not changed by these tests.

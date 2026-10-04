@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import "@/pages/engagement.css";
 
@@ -6,14 +6,22 @@ const links = [
   ["Home", "/"],
   ["Services", "/#services"],
   ["Our Operations", "/operations"],
-  ["About", "/#about"],
   ["Contact", "/contact"],
 ];
 
 export default function PublicHeader({ current }: { current: string }) {
   const [open, setOpen] = useState(false);
+  const toggle = useRef<HTMLButtonElement>(null);
   return (
-    <header className="cc-header">
+    <header
+      className="cc-header"
+      onKeyDown={event => {
+        if (event.key === "Escape" && open) {
+          setOpen(false);
+          toggle.current?.focus();
+        }
+      }}
+    >
       <div className="cc-header-inner">
         <a href="/" aria-label="CallCare BPO home" className="cc-logo">
           <img src="/brand/logo_primary_horizontal.svg" alt="CallCare BPO" />
@@ -38,6 +46,7 @@ export default function PublicHeader({ current }: { current: string }) {
         </a>
         <button
           type="button"
+          ref={toggle}
           className="cc-menu"
           aria-label={open ? "Close navigation" : "Open navigation"}
           aria-expanded={open}
@@ -66,6 +75,7 @@ export default function PublicHeader({ current }: { current: string }) {
           <a
             href="/work-with-us"
             className="cc-button"
+            aria-current={current === "/work-with-us" ? "page" : undefined}
             onClick={() => setOpen(false)}
           >
             Let’s Work Together <ArrowUpRight size={16} />

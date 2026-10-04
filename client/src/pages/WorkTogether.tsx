@@ -118,13 +118,7 @@ export default function WorkTogether() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const requestInFlight = useRef(false);
-  useEffect(() => {
-    const previous = document.title;
-    document.title = "Let’s Work Together | CallCare BPO";
-    return () => {
-      document.title = previous;
-    };
-  }, []);
+
   useEffect(() => {
     if (started) {
       headingRef.current?.focus({ preventScroll: true });

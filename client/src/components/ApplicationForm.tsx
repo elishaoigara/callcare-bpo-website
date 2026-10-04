@@ -40,16 +40,25 @@ export default function ApplicationForm({
       setReady(false);
       return;
     }
+    const timeout = window.setTimeout(() => {
+      if (active) {
+        active = false;
+        setReady(false);
+      }
+    }, 12000);
     supabase.rpc("recruitment_schema_version").then(
       ({ data, error }) => {
+        window.clearTimeout(timeout);
         if (active) setReady(!error && data === 2);
       },
       () => {
+        window.clearTimeout(timeout);
         if (active) setReady(false);
       }
     );
     return () => {
       active = false;
+      window.clearTimeout(timeout);
     };
   }, []);
   const [form, setForm] = useState(initialState);
@@ -180,7 +189,11 @@ export default function ApplicationForm({
   const fieldClass =
     "mt-2 w-full border border-[#c4d6cb] bg-white px-3 py-3 text-sm text-[#315b4d] outline-none focus:border-[#27503e]";
   return (
-    <form onSubmit={submit} className="space-y-5">
+    <form
+      onSubmit={submit}
+      className="space-y-5"
+      aria-busy={state === "submitting"}
+    >
       <fieldset
         disabled={Boolean(submission.current)}
         className="space-y-5 disabled:opacity-70"
@@ -214,6 +227,9 @@ export default function ApplicationForm({
           <label className="text-sm font-semibold text-[#315b4d]">
             Phone
             <input
+              type="tel"
+              autoComplete="tel"
+              maxLength={40}
               value={form.phone}
               onChange={event => update("phone", event.target.value)}
               className={fieldClass}
@@ -223,6 +239,7 @@ export default function ApplicationForm({
           <label className="text-sm font-semibold text-[#315b4d]">
             Location
             <input
+              maxLength={200}
               value={form.location}
               onChange={event => update("location", event.target.value)}
               className={fieldClass}
@@ -232,6 +249,7 @@ export default function ApplicationForm({
           <label className="text-sm font-semibold text-[#315b4d]">
             Years of experience
             <input
+              maxLength={100}
               value={form.yearsExperience}
               onChange={event => update("yearsExperience", event.target.value)}
               className={fieldClass}
@@ -241,6 +259,7 @@ export default function ApplicationForm({
           <label className="text-sm font-semibold text-[#315b4d]">
             Availability
             <input
+              maxLength={200}
               value={form.availability}
               onChange={event => update("availability", event.target.value)}
               className={fieldClass}
@@ -250,6 +269,7 @@ export default function ApplicationForm({
           <label className="text-sm font-semibold text-[#315b4d]">
             LinkedIn URL
             <input
+              maxLength={2048}
               type="url"
               value={form.linkedinUrl}
               onChange={event => update("linkedinUrl", event.target.value)}
@@ -264,6 +284,7 @@ export default function ApplicationForm({
             </span>
             <input
               required={portfolioRequired}
+              maxLength={2048}
               type="url"
               value={form.portfolioUrl}
               onChange={event => update("portfolioUrl", event.target.value)}
@@ -283,7 +304,7 @@ export default function ApplicationForm({
             placeholder="Share your experience, strengths, and the work you want to grow into."
           />
         </label>
-        <label className="flex cursor-pointer items-center gap-3 border border-dashed border-[#9fbcaf] bg-[#f6faf7] px-4 py-4 text-sm text-[#516b5e]">
+        <label className="flex cursor-pointer flex-wrap items-center gap-3 border border-dashed border-[#9fbcaf] bg-[#f6faf7] px-4 py-4 text-sm text-[#516b5e]">
           <UploadCloud size={18} className="shrink-0 text-[#27503e]" />
           <span className="flex-1">
             <span className="block font-semibold text-[#315b4d]">
@@ -297,7 +318,7 @@ export default function ApplicationForm({
             type="file"
             accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             onChange={event => setCv(event.target.files?.[0] ?? null)}
-            className="max-w-[150px] text-xs"
+            className="w-full max-w-full text-xs sm:w-auto sm:max-w-[150px]"
           />
         </label>
         <label className="flex items-start gap-3 text-sm leading-6 text-[#516b5e]">
