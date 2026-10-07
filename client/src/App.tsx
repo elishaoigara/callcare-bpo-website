@@ -11,6 +11,7 @@ const Operations = lazy(() => import("@/pages/Operations"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const WorkTogether = lazy(() => import("@/pages/WorkTogether"));
 const Orders = lazy(() => import("@/pages/Orders"));
+const Billing = lazy(() => import("@/pages/Billing"));
 import Home from "@/pages/Home";
 const Careers = lazy(() => import("@/pages/Careers"));
 const JobDetail = lazy(() => import("@/pages/JobDetail"));
@@ -27,6 +28,7 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/work-with-us" component={WorkTogether} />
       <Route path="/orders" component={Orders} />
+      <Route path="/billing" component={Billing} />
       <Route path="/careers" component={Careers} />
       <Route path="/careers/jobs/:slug" component={JobDetail} />
       <Route path="/recruitment-preview" component={RecruitmentDashboard} />

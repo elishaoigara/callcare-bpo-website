@@ -7,6 +7,11 @@ export type PageDetails = {
   noindex?: boolean;
 };
 export const pageDetails: Record<string, PageDetails> = {
+  "/billing": {
+    title: "Orders & Billing | CallCare BPO",
+    description: "Restricted CallCare billing workspace.",
+    noindex: true,
+  },
   "/orders": {
     title: "Your Order | CallCare BPO",
     description:

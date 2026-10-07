@@ -3,6 +3,7 @@ import { randomBytes, randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { paymentConfig } from "../server/payments/config.js";
+import { orderAccessToken } from "../server/billing/access.js";
 import { hashToken } from "../server/payments/service.js";
 
 const schema = z
@@ -40,8 +41,8 @@ async function main() {
   const db = createClient(config.databaseUrl, config.databaseSecret, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const token = randomBytes(32).toString("hex");
   const id = randomUUID();
+  const token = orderAccessToken(id);
   const number = `CC-${randomBytes(6).toString("hex").toUpperCase()}`;
   const { error } = await db.from("payment_orders").insert({
     id,

@@ -17,7 +17,7 @@ No production database changes or payments were made during development.
 - Private payment tables inaccessible to anonymous users and recruitment users.
 
 This is not escrow. It does not hold balances or release funds upon acceptance.
-There is no self-service price catalog, customer login, billing staff dashboard,
+There is no self-service price catalog, customer login,
 recurring subscription, tax invoice, automatic refund, or automated email receipt.
 Existing business inquiries continue through the current form; staff agree on a
 quote before creating an order. The printed page is a payment confirmation,
@@ -26,7 +26,7 @@ not a tax invoice. Refunds/disputes remain managed in Paystack by the founder.
 ## Test configuration (do this before any production setup)
 
 1. Create a **separate test Supabase project**. Run `supabase/payments.sql` in its
-   SQL editor. This is an additive, rerunnable setup script, not a change to the
+   SQL editor, then run `supabase/billing.sql`. This is an additive, rerunnable setup script, not a change to the
    existing recruitment schema. Do not run it against production for this review.
 2. On Vercel, set the following variables for **Preview**, scoped to this branch
    where possible. Never use a `VITE_` prefix for payment secrets.
@@ -55,13 +55,56 @@ Do not put a protection bypass secret in a customer link.
    Checkout supplies the callback URL (`PAYMENTS_SITE_URL/orders`) itself.
    Keep test and live webhook URLs separate.
 
-## Creating the first agreed order
+## Founder dashboard setup and everyday use
+
+1. In the same test Supabase project, create a confirmed founder user under
+   Authentication → Users with a strong, unique password. Disable public signups
+   for this dedicated project. Share credentials privately, never in the repo.
+2. Copy that user's UUID and grant access in the SQL editor:
+
+   ```sql
+   insert into public.billing_users(user_id, active)
+   values ('REPLACE-WITH-FOUNDER-USER-UUID', true)
+   on conflict (user_id) do update set active=true;
+   ```
+
+   Recruitment roles do not grant billing permission. To revoke access, set
+   `active=false` for the user. Every API request checks membership again.
+
+3. Add these Preview environment variables and redeploy:
+   - `VITE_BILLING_SUPABASE_URL`: same test project URL.
+   - `VITE_BILLING_SUPABASE_PUBLISHABLE_KEY`: its public publishable/anon key,
+     **never** the service-role key.
+   - `PAYMENTS_LINK_SECRET`: server-only, 64 random hexadecimal characters.
+     Generate securely, for example `openssl rand -hex 32`; keep it private and
+     stable. Use separate secrets for test and production. Changing this secret
+     prevents copying existing links from the dashboard, though previously issued
+     links remain valid. Legacy random-token orders require their original link.
+4. Open `/billing`, sign in, and select **Create order**. Enter the client's email,
+   agreed scope, amount, currency, payment terms and expiry.
+5. Select the saved order and **Copy private link**. Share it privately with that
+   customer. The website does not send an email automatically.
+6. Payment is marked paid only after server verification. **Check payment** retries
+   verification; **Flag payment for review** records an internal issue, not a refund.
+   Pending means checkout has started, not necessarily that a bank is processing it.
+7. Update delivery with a required internal note. Delivery is founder-managed;
+   client accept/revision buttons and escrow are not included. Delivery updates
+   never charge or release money. Changes and verified payments appear in history.
+
+The dashboard can prepare orders while `PAYMENTS_ENABLED=false`. It still requires
+its database, auth configuration and link secret. Password assistance is handled
+by the administrator through Supabase; no public signup/reset flow is added here.
+The preview-only `/billing?sample=1` uses clearly labelled illustrative data and
+cannot read customer records or perform writes. It is disabled in production builds.
+Both billing and order routes are excluded from analytics and search indexing.
+
+## Operator fallback: creating an agreed order
 
 Only trusted staff/operators should run the order creation script. There is no
 public create-order API and no access for existing recruiters by default.
 
 Create `.env.payments.local` on your trusted machine with the server variables
-above. Use the SAME database, mode and site origin as the preview. Never commit it.
+above, including `PAYMENTS_LINK_SECRET`. Use the SAME database, mode and site origin as the preview. Never commit it.
 
 Save a private `quote.order.json` (ignored by git), containing for example:
 
@@ -87,9 +130,9 @@ With Node 22+ and installed dependencies:
 node --env-file=.env.payments.local --import tsx scripts/create-payment-order.ts ./quote.order.json
 ```
 
-The script writes the order and prints a private link once. It does not email
+The script writes the order and prints a private link. It does not email
 anyone or charge a payment. Share it only with the intended customer.
-The access code is a 256-bit random bearer secret stored as a SHA-256 hash in the
+The access code is a 256-bit HMAC-derived bearer secret stored as a SHA-256 hash in the
 database. Anyone possessing the link can view/pay that order; use it only for
 ordinary commercial scope/terms, not passwords or confidential client datasets.
 It is kept in browser session storage for the payment return, removed from the
@@ -143,7 +186,9 @@ Vercel firewall rate limits before opening live collection broadly.
 
 - Confirm international cards, M-PESA, USD and the correct payout accounts.
 - Founder approves actual contract/refund/privacy terms and quote creation access.
-- Apply the reviewed SQL to the chosen production database separately.
+- Apply both reviewed SQL files to the chosen production database separately.
+- Create the production founder account and explicit billing grant. Set the production
+  billing public auth variables and a separate stable server-only link secret.
 - Configure production-only `sk_live_…`, `PAYSTACK_MODE=live`, `PAYMENTS_ALLOW_LIVE=true`,
   `PAYMENTS_ENABLED=true`, and `PAYMENTS_SITE_URL=https://www.callcarebpo.com`.
 - Set the LIVE webhook to `https://www.callcarebpo.com/api/payments/webhook`.

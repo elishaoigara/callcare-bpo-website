@@ -14,7 +14,12 @@ export function analyticsUrl(endpoint?: string, websiteId?: string) {
 }
 
 export function initializeAnalytics() {
-  if (window.location.pathname.replace(/\/$/, "") === "/orders") return;
+  if (
+    ["/orders", "/billing"].includes(
+      window.location.pathname.replace(/\/$/, "")
+    )
+  )
+    return;
   const websiteId = import.meta.env.VITE_ANALYTICS_WEBSITE_ID;
   const src = analyticsUrl(import.meta.env.VITE_ANALYTICS_ENDPOINT, websiteId);
   if (!src || document.getElementById("callcare-analytics")) return;

@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import { handleBilling } from "./billing/http.js";
 import { handlePayment, type PaymentAction } from "./payments/http.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -10,6 +11,31 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  app.all(
+    "/api/billing",
+    express.raw({ type: "application/json", limit: "32kb" }),
+    async (req, res) => {
+      const headers = new Headers();
+      for (const [key, value] of Object.entries(req.headers))
+        if (typeof value === "string") headers.set(key, value);
+      const result = await handleBilling(
+        new Request(`http://localhost${req.originalUrl}`, {
+          method: req.method,
+          headers,
+          ...(!["GET", "HEAD"].includes(req.method)
+            ? {
+                body:
+                  req.body instanceof Buffer
+                    ? new Uint8Array(req.body)
+                    : new Uint8Array(),
+              }
+            : {}),
+        })
+      );
+      result.headers.forEach((value, key) => res.setHeader(key, value));
+      res.status(result.status).send(await result.text());
+    }
+  );
 
   app.all(
     "/api/payments/:action",
