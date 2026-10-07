@@ -10,6 +10,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 const Operations = lazy(() => import("@/pages/Operations"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const WorkTogether = lazy(() => import("@/pages/WorkTogether"));
+const Orders = lazy(() => import("@/pages/Orders"));
 import Home from "@/pages/Home";
 const Careers = lazy(() => import("@/pages/Careers"));
 const JobDetail = lazy(() => import("@/pages/JobDetail"));
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/operations" component={Operations} />
       <Route path="/contact" component={Contact} />
       <Route path="/work-with-us" component={WorkTogether} />
+      <Route path="/orders" component={Orders} />
       <Route path="/careers" component={Careers} />
       <Route path="/careers/jobs/:slug" component={JobDetail} />
       <Route path="/recruitment-preview" component={RecruitmentDashboard} />
