@@ -7,6 +7,17 @@ export type PageDetails = {
   noindex?: boolean;
 };
 export const pageDetails: Record<string, PageDetails> = {
+  "/billing": {
+    title: "Orders & Billing | CallCare BPO",
+    description: "Restricted CallCare billing workspace.",
+    noindex: true,
+  },
+  "/orders": {
+    title: "Your Order | CallCare BPO",
+    description:
+      "Review your agreed CallCare scope and payment details using your private order link.",
+    noindex: true,
+  },
   "/": {
     title: "CallCare BPO — Operational support that helps you scale",
     description:

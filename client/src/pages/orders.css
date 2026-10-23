@@ -1,0 +1,247 @@
+.orders-page #order-content {
+  padding-top: 64px;
+}
+.order-heading {
+  max-width: 850px;
+  margin-bottom: 40px;
+}
+.order-heading h1 {
+  font-size: clamp(2.8rem, 5vw, 4.6rem);
+  margin: 18px 0 22px;
+}
+.order-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(260px, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+.order-card {
+  background: #fff;
+  border: 1px solid #dce7df;
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 44px);
+  box-shadow: 0 12px 45px #17322606;
+  min-width: 0;
+}
+.order-card h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin: 20px 0;
+  overflow-wrap: anywhere;
+}
+.order-card h3 {
+  margin: 24px 0 10px;
+  font-size: 1.3rem;
+}
+.order-copy {
+  color: #516b5e;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.order-icon {
+  color: #338461;
+}
+.order-aside {
+  border-radius: 24px;
+  background: #edf3ee;
+  padding: 32px;
+}
+.order-aside h2 {
+  font-size: 1.8rem;
+  margin: 20px 0 26px;
+}
+.order-aside ol {
+  list-style: decimal-leading-zero;
+  padding-left: 28px;
+}
+.order-aside li {
+  padding-left: 8px;
+  margin-bottom: 24px;
+}
+.order-aside li::marker {
+  color: #338461;
+  font-weight: 700;
+}
+.order-aside strong,
+.order-aside span {
+  display: block;
+}
+.order-aside span,
+.order-help p {
+  color: #516b5e;
+  line-height: 1.7;
+  font-size: 14px;
+  margin-top: 6px;
+}
+.order-help {
+  border-top: 1px solid #ccdbd0;
+  padding-top: 24px;
+  margin-top: 28px;
+}
+.order-help h3 {
+  margin-top: 22px;
+  font-size: 1.2rem;
+}
+.order-help a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+.order-access {
+  display: grid;
+  gap: 12px;
+  margin-top: 30px;
+}
+.order-access label {
+  font-size: 14px;
+  font-weight: 650;
+}
+.order-access input {
+  border: 1px solid #a9beb0;
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 16px;
+  width: 100%;
+  min-width: 0;
+  background: #fbfdfc;
+}
+.order-access button {
+  margin-top: 6px;
+}
+.order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 650;
+}
+.order-badge {
+  border-radius: 30px;
+  padding: 8px 12px;
+  background: #edf3ee;
+}
+.order-total {
+  border-top: 1px solid #dce7df;
+  border-bottom: 1px solid #dce7df;
+  margin-top: 28px;
+  padding: 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.order-total strong {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+.order-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.6;
+  margin: 22px 0;
+  cursor: pointer;
+}
+.order-consent input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: #27503e;
+}
+.order-pay {
+  width: 100%;
+}
+.order-small,
+.order-expiry {
+  color: #516b5e;
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 14px;
+}
+.order-test,
+.order-notice {
+  background: #fff8df;
+  color: #655219;
+  padding: 14px 16px;
+  border-radius: 10px;
+  line-height: 1.7;
+  margin-top: 20px;
+}
+.order-error {
+  background: #fff0ed;
+  color: #8a2c22;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-top: 20px;
+  line-height: 1.7;
+}
+.order-confirmation {
+  display: flex;
+  gap: 15px;
+  background: #edf6ee;
+  padding: 24px;
+  margin-top: 24px;
+  border-radius: 14px;
+}
+.order-confirmation > svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.order-confirmation h3 {
+  margin-top: 0;
+}
+.order-confirmation p {
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.order-new {
+  margin-top: 32px;
+  color: #516b5e;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 14px;
+}
+.order-new a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #27503e;
+  text-decoration: underline;
+}
+@media (max-width: 760px) {
+  .order-layout {
+    grid-template-columns: 1fr;
+  }
+  .orders-page #order-content {
+    padding: 40px 20px;
+  }
+  .order-aside {
+    padding: 26px;
+  }
+}
+@media print {
+  .orders-page header,
+  .order-aside,
+  .order-heading,
+  .order-new,
+  .orders-page button,
+  footer {
+    display: none !important;
+  }
+  .order-layout {
+    display: block;
+  }
+  .order-card {
+    box-shadow: none;
+  }
+}
