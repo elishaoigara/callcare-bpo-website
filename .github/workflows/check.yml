@@ -1,4 +1,4 @@
-name: Validate careers and recruitment
+name: Validate website, recruitment and payments
 on:
   push:
     branches: [main]

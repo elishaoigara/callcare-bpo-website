@@ -4,6 +4,70 @@ This branch prepares quote-based, direct Paystack payments. It must not be merge
 or enabled for live collection until the founder approves the flow and terms.
 No production database changes or payments were made during development.
 
+## Current activation status (checked 23 October 2026)
+
+The implementation is in draft PR #3 on `feature/paystack-integration`. The Vercel
+project `callcare-bpo-website` currently has recruitment variables only. Payment
+and billing variable names are absent in both Preview and Production. This check
+inspected variable metadata only, not secret values. Database installation,
+founder access, Paystack test transactions and settlement have not been verified
+against a deployed payment environment. Having a live key alone does not enable
+this flow.
+
+### Where to add the live key
+
+Open [CallCare environment settings](https://vercel.com/elisha-oigaras-projects/callcare-bpo-website/settings/environment-variables).
+Add `PAYSTACK_SECRET_KEY` as a **Secret**, scoped to **Production only**. Its value
+must be your Paystack secret key starting `sk_live_`, not `pk_live_`. Do not paste
+it into chat, the repo or a `VITE_` variable. No Paystack public key is required.
+Keep payment collection disabled until the test flow has passed.
+
+Production will also need these settings (use separate test values for Preview):
+
+| Variable                                | Production setting                                             |
+| --------------------------------------- | -------------------------------------------------------------- |
+| `PAYSTACK_MODE`                         | `live`                                                         |
+| `PAYMENTS_ENABLED`                      | `false` during preparation; `true` only at approved activation |
+| `PAYMENTS_ALLOW_LIVE`                   | `true` only at approved activation                             |
+| `PAYMENTS_SITE_URL`                     | `https://www.callcarebpo.com`                                  |
+| `PAYMENTS_SUPABASE_URL`                 | Chosen production payments project URL                         |
+| `PAYMENTS_SUPABASE_SECRET_KEY`          | Same project's backend secret key                              |
+| `VITE_BILLING_SUPABASE_URL`             | Same production payments project URL                           |
+| `VITE_BILLING_SUPABASE_PUBLISHABLE_KEY` | Same project's public publishable key                          |
+| `PAYMENTS_LINK_SECRET`                  | Separate stable random 64-character hexadecimal secret         |
+| `PAYMENTS_USD_ENABLED`                  | `false` until USD is approved and tested                       |
+
+Redeploy after setting variables; frontend billing variables are embedded during
+the build. Leave the existing recruitment variables in place. Paystack Live Mode
+webhook URL: `https://www.callcarebpo.com/api/payments/webhook`. The server supplies
+the callback URL `https://www.callcarebpo.com/orders` when starting checkout.
+
+### Read-only setup checker
+
+With Node 22+ and the project's pinned pnpm installed, put the intended environment
+in an ignored `.env.payments.local` file, then run:
+
+```sh
+node --env-file=.env.payments.local --import tsx scripts/check-payments.ts
+node --env-file=.env.payments.local --import tsx scripts/check-payments.ts --database
+```
+
+Or, when variables are already loaded into the process, run `pnpm payments:check`
+and `pnpm payments:check --database`. Live configuration requires the actual
+Vercel Production context; do not override Vercel's environment variable in the
+dashboard to bypass that check. Use test configuration for local checks.
+
+The first command validates configuration only. `--database` additionally makes
+read-only HEAD queries for required tables/columns and checks that at least one
+active billing membership exists. It does not inspect customer records, sign in
+as the founder, call Paystack, create orders, change the database or charge money.
+Failure exits nonzero and messages never print key values. It detects mismatched
+test/live keys, wrong public/backend Supabase key types, auth/database project
+mismatches, missing link secrets and common secret-key exposure in `VITE_` values.
+A passing result does not prove database RPC installation, RLS, auth login,
+deployed routing, webhook delivery or settlement; complete the acceptance checks
+below. `PAYMENTS_ENABLED=false` is permitted and explicitly reported as disabled.
+
 ## What is included
 
 - `/orders`: private order view, scope, terms, fixed amount/currency, consent,
@@ -196,5 +260,11 @@ Vercel firewall rate limits before opening live collection broadly.
   its order record, dashboard transaction, and payout. Do not infer settlement
   from test results. Never expose production secrets in preview environments.
 
-References: Paystack Accept Payments, Verify Payments and Webhooks documentation;
-Supabase RLS documentation; Vercel Node.js Web Standard function documentation.
+References:
+
+- [Paystack: Accept payments](https://paystack.com/docs/payments/accept-payments/)
+- [Paystack: Verify payments](https://paystack.com/docs/payments/verify-payments/)
+- [Paystack: Webhooks](https://paystack.com/docs/payments/webhooks/)
+- [Supabase: API keys](https://supabase.com/docs/guides/getting-started/api-keys)
+- [Supabase: Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security)
+- [Vercel: Environment variables](https://vercel.com/docs/environment-variables)

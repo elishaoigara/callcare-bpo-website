@@ -4,7 +4,8 @@
     "shared/**/*",
     "server/**/*",
     "api/**/*",
-    "scripts/create-payment-order.ts"
+    "scripts/create-payment-order.ts",
+    "scripts/check-payments.ts"
   ],
   "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
